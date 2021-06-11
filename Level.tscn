@@ -1,8 +1,15 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://Player.tscn" type="PackedScene" id=1]
+[ext_resource path="res://DebugPlatform.tscn" type="PackedScene" id=2]
 
 [node name="Node2D" type="Node2D"]
 
 [node name="Player" parent="." instance=ExtResource( 1 )]
-position = Vector2( 321, 256 )
+position = Vector2( 221.363, 294.956 )
+
+[node name="DebugPlatform" parent="." instance=ExtResource( 2 )]
+position = Vector2( 215.996, 515.031 )
+
+[node name="DebugPlatform2" parent="." instance=ExtResource( 2 )]
+position = Vector2( 533.637, 518.777 )
