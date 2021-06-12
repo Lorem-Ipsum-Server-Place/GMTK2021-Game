@@ -36,6 +36,8 @@ func _ready():
 	# want to
 	player_weapon = WEAPON_SWORD.instance()
 	add_child(player_weapon, true)
+	
+	connect("damage_player", self, "_on_Player_damage_player")
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -99,9 +101,6 @@ func _physics_process(delta):
 	for i in range(collision_count):
 		var collision = get_slide_collision(i)
 		if not is_invincible and  is_collider_enemy(collision):
-			# start our timer for our invincibility frames
-			$InvincibilityTimer.start(INVINCIBILITY_DURATION_SECONDS)
-			is_invincible = true
 			emit_signal("damage_player")
 	
 	# Ask the collision whether we're stood on something
@@ -119,3 +118,8 @@ func _on_GameState_player_dead():
 	# in the physics processing so just set a flag saying that we're dead so
 	# we can clean ourselves up in the process() phase where it's safe to do so
 	dead = true
+
+func _on_Player_damage_player():
+	# start our timer for our invincibility frames
+	$InvincibilityTimer.start(INVINCIBILITY_DURATION_SECONDS)
+	is_invincible = true

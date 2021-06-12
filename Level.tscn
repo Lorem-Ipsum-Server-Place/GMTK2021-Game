@@ -34,6 +34,7 @@ position = Vector2( -2.34088, 4.19659 )
 
 [node name="Player" parent="." instance=ExtResource( 1 )]
 position = Vector2( 265.204, 853.57 )
+scale = Vector2( 2, 2 )
 
 [connection signal="player_dead" from="GameState" to="Player" method="_on_GameState_player_dead"]
 [connection signal="damage_player" from="Player" to="GameState" method="_on_Player_damage_player"]

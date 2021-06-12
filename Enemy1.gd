@@ -31,6 +31,8 @@ func _process(delta):
 		var movement_delta = player.position - position
 		
 		movement_delta = movement_delta.normalized() * MOVEMENT_SPEED
-		move_and_collide(movement_delta)
+		var collision = move_and_collide(movement_delta)
+		if collision != null and collision.collider.name.find("Player"):
+			emit_signal("damage_player")
 	
 	
