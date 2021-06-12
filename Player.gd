@@ -21,7 +21,6 @@ const PLAYER_JUMP_COUNT = 2
 const PLAYER_WEAPON_DISTANCE = 40
 const INVINCIBILITY_DURATION_SECONDS = 1
 const ENEMY_COLLISION_LAYERS = [2]
-const TINY_FLOAT = 0.0000001
 
 const GRAVITY = 60
 
@@ -44,24 +43,24 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	var mouse_position = get_viewport().get_mouse_position()
-	var centre_of_screen = get_viewport_rect().size / 2
+	#var mouse_position = get_viewport().get_mouse_position()
+	#var centre_of_screen = get_viewport_rect().size / 2
 	
 	# position weapon in line with cursor relative to the character
-	var sword_position = (mouse_position - centre_of_screen).normalized() * PLAYER_WEAPON_DISTANCE
-	player_weapon.position = sword_position
+	#var sword_position = (mouse_position - centre_of_screen).normalized() * PLAYER_WEAPON_DISTANCE
+	#player_weapon.position = sword_position
 	
-	var y_delta = sword_position.y
-	if y_delta == 0:
-		y_delta = -TINY_FLOAT
+	#var y_delta = sword_position.y
+	#if y_delta == 0:
+	#	y_delta = -TINY_FLOAT
 	
 	# work out the angle to point the sword away based on our position delta
-	var weapon_rotation = atan(sword_position.x / -y_delta)
+	#var weapon_rotation = atan(sword_position.x / -y_delta)
 	# correct the angle if the sword points down
-	if sword_position.y > 0:
-		weapon_rotation += PI
+	#if sword_position.y > 0:
+	#	weapon_rotation += PI
 	
-	player_weapon.rotation = weapon_rotation
+	#player_weapon.rotation = weapon_rotation
 	
 	# We died during the physics processing, delete ourselves
 	if dead:
@@ -137,3 +136,15 @@ func _on_Player_damage_player():
 	$InvincibilityTimer.start(INVINCIBILITY_DURATION_SECONDS)
 	is_invincible = true
 	set_enemy_collisions(false)
+	
+func on_GameState_rotate_sword(rotation):
+	# Set our weapon rotation to what's set in the game state
+	player_weapon.rotation = rotation
+	
+	var normal_offset = Vector2(
+		sin(rotation),
+		-cos(rotation)
+	)
+	player_weapon.position = normal_offset * PLAYER_WEAPON_DISTANCE
+	
+	print("set weapon rotation")
