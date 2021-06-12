@@ -20,6 +20,7 @@ const PLAYER_JUMP_VELOCITY = 1000
 const PLAYER_JUMP_COUNT = 2
 const PLAYER_WEAPON_DISTANCE = 40
 const INVINCIBILITY_DURATION_SECONDS = 1
+const ENEMY_COLLISION_LAYERS = [2]
 
 const GRAVITY = 60
 
@@ -108,9 +109,15 @@ func _physics_process(delta):
 		jump_count = PLAYER_JUMP_COUNT
 
 
+func set_enemy_collisions(collisions_on: bool):
+	for layer in ENEMY_COLLISION_LAYERS:
+		set_collision_layer_bit(layer, collisions_on)
+		set_collision_mask_bit(layer, collisions_on)
+
 func _on_InvincibilityTimer_timeout():
 	# The timer has told us that our invincibility ran out
 	is_invincible = false
+	set_enemy_collisions(true)
 
 
 func _on_GameState_player_dead():
@@ -123,3 +130,4 @@ func _on_Player_damage_player():
 	# start our timer for our invincibility frames
 	$InvincibilityTimer.start(INVINCIBILITY_DURATION_SECONDS)
 	is_invincible = true
+	set_enemy_collisions(false)

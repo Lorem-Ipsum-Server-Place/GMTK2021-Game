@@ -2,7 +2,7 @@ extends KinematicBody2D
 
 
 const MAX_OFFSET = 0.4
-const MOVEMENT_SPEED = 1
+const MOVEMENT_SPEED = 10
 
 var absolute_position = Vector2()
 var vertical_velocity_modifier = 0
@@ -31,8 +31,10 @@ func _process(delta):
 		var movement_delta = player.position - position
 		
 		movement_delta = movement_delta.normalized() * MOVEMENT_SPEED
-		var collision = move_and_collide(movement_delta)
-		if collision != null and collision.collider.name.find("Player"):
-			emit_signal("damage_player")
+		move_and_slide(movement_delta)
+		for i in range(get_slide_count()):
+			var collision = get_slide_collision(i)
+			if collision != null and collision.collider.name.find("Player"):
+				emit_signal("damage_player")
 	
 	
