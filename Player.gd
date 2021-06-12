@@ -5,19 +5,21 @@ enum PlayerDirection{
 	LEFT
 }
 
+
+
 var player_velocity = Vector2()
 var jump_count = 1
 var player_weapon = null
 var player_direction = PlayerDirection.RIGHT
 var is_invincible = false
-
-
+var PLAYER_MOVE_SPEED = INITIAL_PLAYER_MOVE_SPEED
+var PLAYER_JUMP_COUNT = INITIAL_PLAYER_JUMP_COUNT
 var dead = false
 
 
-const PLAYER_MOVE_SPEED = 450
+const INITIAL_PLAYER_MOVE_SPEED = 450
 const PLAYER_JUMP_VELOCITY = 1000
-const PLAYER_JUMP_COUNT = 2
+const INITIAL_PLAYER_JUMP_COUNT = 2
 const PLAYER_WEAPON_DISTANCE = 40
 const INVINCIBILITY_DURATION_SECONDS = 1
 const ENEMY_COLLISION_LAYERS = [2]
@@ -25,6 +27,7 @@ const ENEMY_COLLISION_LAYERS = [2]
 const GRAVITY = 60
 
 signal damage_player()
+signal collect_pickup()
 
 # Load weapon scenes, we can choose from these on init
 onready var WEAPON_SWORD = load("res://weapon_sword.tscn")
@@ -43,26 +46,6 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	#var mouse_position = get_viewport().get_mouse_position()
-	#var centre_of_screen = get_viewport_rect().size / 2
-	
-	# position weapon in line with cursor relative to the character
-	#var sword_position = (mouse_position - centre_of_screen).normalized() * PLAYER_WEAPON_DISTANCE
-	#player_weapon.position = sword_position
-	
-	#var y_delta = sword_position.y
-	#if y_delta == 0:
-	#	y_delta = -TINY_FLOAT
-	
-	# work out the angle to point the sword away based on our position delta
-	#var weapon_rotation = atan(sword_position.x / -y_delta)
-	# correct the angle if the sword points down
-	#if sword_position.y > 0:
-	#	weapon_rotation += PI
-	
-	#player_weapon.rotation = weapon_rotation
-	
-	# We died during the physics processing, delete ourselves
 	if dead:
 		self.free()
 
@@ -93,6 +76,15 @@ func is_collider_enemy(collision: KinematicCollision2D):
 		return true
 	return false
 
+
+func is_collider_pickup(collision: KinematicCollision2D):
+	var colliding_object_class = collision.collider.name
+	
+	# Assume that all Pickups will have Pickup in their KinematicBody2D name
+	if colliding_object_class.find("Pickup") != -1:
+		print("Pickup!")
+		return true
+	return false
 func _physics_process(delta):
 	get_inputs()
 	
@@ -108,6 +100,10 @@ func _physics_process(delta):
 		var collision = get_slide_collision(i)
 		if not is_invincible and  is_collider_enemy(collision):
 			emit_signal("damage_player")
+		elif is_collider_pickup(collision):
+			emit_signal("collect_pickup")
+			
+			
 	
 	# Ask the collision whether we're stood on something
 	if jump_count != PLAYER_JUMP_COUNT and is_on_floor():
@@ -137,6 +133,7 @@ func _on_Player_damage_player():
 	is_invincible = true
 	set_enemy_collisions(false)
 	
+
 func on_GameState_rotate_sword(rotation):
 	# Set our weapon rotation to what's set in the game state
 	player_weapon.rotation = rotation
@@ -148,3 +145,13 @@ func on_GameState_rotate_sword(rotation):
 	player_weapon.position = normal_offset * PLAYER_WEAPON_DISTANCE
 	
 	print("set weapon rotation")
+
+
+func _on_Pickup_Temp_boostspeed(increase):
+	PLAYER_MOVE_SPEED += increase
+	print("Boosting Speed")
+
+
+func _on_Pickup_Temp_boostJumps(Jumping):
+	PLAYER_JUMP_COUNT += Jumping
+	print("Boosting Jumps")
