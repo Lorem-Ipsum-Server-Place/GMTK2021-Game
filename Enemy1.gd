@@ -20,16 +20,17 @@ func _process(delta):
 	var time = OS.get_ticks_usec() / 100000
 	
 	vertical_velocity_modifier = sin(time + tick_random_offset) * MAX_OFFSET
-	print(time)
 	
 	#position = absolute_position
 	position.y += vertical_velocity_modifier
 	
-	var player = get_node("/root/Node2D/Player")
-	
-	var movement_delta = player.position - position
-	
-	movement_delta = movement_delta.normalized() * MOVEMENT_SPEED
-	move_and_collide(movement_delta)
+	# We don't want to error out if the player has died so allow for finding
+	# a null reference
+	var player = get_node_or_null("/root/GameWorld/Player")
+	if player != null:
+		var movement_delta = player.position - position
+		
+		movement_delta = movement_delta.normalized() * MOVEMENT_SPEED
+		move_and_collide(movement_delta)
 	
 	
