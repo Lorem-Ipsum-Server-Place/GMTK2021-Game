@@ -5,19 +5,21 @@ enum PlayerDirection{
 	LEFT
 }
 
+
+
 var player_velocity = Vector2()
 var jump_count = 1
 var player_weapon = null
 var player_direction = PlayerDirection.RIGHT
 var is_invincible = false
-
-
+var PLAYER_MOVE_SPEED = INITIAL_PLAYER_MOVE_SPEED
+var PLAYER_JUMP_COUNT = INITIAL_PLAYER_JUMP_COUNT
 var dead = false
 
 
-const PLAYER_MOVE_SPEED = 450
+const INITIAL_PLAYER_MOVE_SPEED = 450
 const PLAYER_JUMP_VELOCITY = 1000
-const PLAYER_JUMP_COUNT = 2
+const INITIAL_PLAYER_JUMP_COUNT = 2
 const PLAYER_WEAPON_DISTANCE = 40
 const INVINCIBILITY_DURATION_SECONDS = 1
 const ENEMY_COLLISION_LAYERS = [2]
@@ -26,6 +28,7 @@ const TINY_FLOAT = 0.0000001
 const GRAVITY = 60
 
 signal damage_player()
+signal collect_pickup()
 
 # Load weapon scenes, we can choose from these on init
 onready var WEAPON_SWORD = load("res://weapon_sword.tscn")
@@ -61,7 +64,9 @@ func _process(delta):
 	if sword_position.y > 0:
 		weapon_rotation += PI
 	
+	
 	player_weapon.rotation = weapon_rotation
+	
 	
 	# We died during the physics processing, delete ourselves
 	if dead:
@@ -94,6 +99,15 @@ func is_collider_enemy(collision: KinematicCollision2D):
 		return true
 	return false
 
+
+func is_collider_pickup(collision: KinematicCollision2D):
+	var colliding_object_class = collision.collider.name
+	
+	# Assume that all Pickups will have Pickup in their KinematicBody2D name
+	if colliding_object_class.find("Pickup") != -1:
+		print("Pickup!")
+		return true
+	return false
 func _physics_process(delta):
 	get_inputs()
 	
@@ -109,6 +123,10 @@ func _physics_process(delta):
 		var collision = get_slide_collision(i)
 		if not is_invincible and  is_collider_enemy(collision):
 			emit_signal("damage_player")
+		elif is_collider_pickup(collision):
+			emit_signal("collect_pickup")
+			
+			
 	
 	# Ask the collision whether we're stood on something
 	if jump_count != PLAYER_JUMP_COUNT and is_on_floor():
@@ -137,3 +155,13 @@ func _on_Player_damage_player():
 	$InvincibilityTimer.start(INVINCIBILITY_DURATION_SECONDS)
 	is_invincible = true
 	set_enemy_collisions(false)
+
+
+func _on_Pickup_Temp_boostspeed(increase):
+	PLAYER_MOVE_SPEED += increase
+	print("Boosting Speed")
+
+
+func _on_Pickup_Temp_boostJumps(Jumping):
+	PLAYER_JUMP_COUNT += Jumping
+	print("Boosting Jumps")
