@@ -31,7 +31,7 @@ jobs:
           # Name of the exported binary
           name: LISP-Game
           # Name of the preset in `export_presets.cfg` to use
-          preset: "Windows Desktop"
+          preset: WindowsDesktop
           # Optional name of the subdirectory to put exported project in
           #subdirectory: # optional, default is 
           # Set true to output an artifact zip file
