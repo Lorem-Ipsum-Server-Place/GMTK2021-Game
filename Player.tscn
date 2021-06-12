@@ -23,4 +23,7 @@ texture = ExtResource( 1 )
 process_mode = 0
 one_shot = true
 
+[node name="Camera2D" type="Camera2D" parent="."]
+current = true
+
 [connection signal="timeout" from="InvincibilityTimer" to="." method="_on_InvincibilityTimer_timeout"]
