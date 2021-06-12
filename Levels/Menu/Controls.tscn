@@ -1,0 +1,53 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://Levels/Menu/Controls.gd" type="Script" id=1]
+
+[sub_resource type="DynamicFontData" id=1]
+font_path = "res://Extrude.ttf"
+
+[sub_resource type="DynamicFont" id=2]
+size = 32
+font_data = SubResource( 1 )
+
+[node name="Control" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Button" type="Button" parent="."]
+margin_left = 391.0
+margin_top = 549.0
+margin_right = 619.0
+margin_bottom = 599.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Back To Menu" type="Label" parent="."]
+margin_left = 13.739
+margin_top = 8.7627
+margin_right = 176.739
+margin_bottom = 32.7627
+rect_pivot_offset = Vector2( 69.7566, 12 )
+custom_fonts/font = SubResource( 2 )
+text = "Hello World"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="."]
+margin_left = 397.556
+margin_top = 561.318
+margin_right = 626.556
+margin_bottom = 607.318
+rect_pivot_offset = Vector2( 69.7566, 12 )
+custom_fonts/font = SubResource( 2 )
+text = "Back to menu"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[connection signal="pressed" from="Button" to="." method="_on_Button_pressed"]
