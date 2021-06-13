@@ -11,11 +11,6 @@ var enemy_spawn_count = 1
 
 onready var flying_enemy = load("res://FlyingEnemy.tscn")
 
-onready var level_enemies = [
-	[flying_enemy],
-	[flying_enemy],
-]
-
 onready var level1 = load("res://Levels/ConstructedLevels/Level1.tscn")
 onready var example_level = load("res://Levels/ConstructedLevels/ExampleLevel.tscn")
 
@@ -212,15 +207,12 @@ func _on_timer_add_enemies():
 	for i in range(len(viewports)):
 		var viewport = viewports[i] as Viewport
 		
-		var possible_enemies = level_enemies[i]
-		
 		var player = get_node_or_null(viewport.get_path() as String + "/Player")
 		if player != null and is_instance_valid(player):
 			var player_weapon = player.player_weapon
 			
 			for j in range(enemy_spawn_count):
-				var enemy_to_spawn = possible_enemies[rand_range(0, len(possible_enemies))]
-				var enemy_instance = enemy_to_spawn.instance()
+				var enemy_instance = flying_enemy.instance()
 				
 				var e_graphic = enemy_instance.get_node("EnemyGraphic") as Sprite
 				

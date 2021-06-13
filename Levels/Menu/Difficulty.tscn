@@ -26,19 +26,26 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Start" type="Button" parent="VBoxContainer"]
+[node name="Normal" type="Button" parent="VBoxContainer"]
 margin_right = 154.0
 margin_bottom = 20.0
-text = "Start"
+text = "Normal"
 
-[node name="Quit" type="Button" parent="VBoxContainer"]
+[node name="Hard" type="Button" parent="VBoxContainer"]
 margin_top = 24.0
 margin_right = 154.0
 margin_bottom = 44.0
-text = "Quit"
+text = "Hard"
+
+[node name="Impossible" type="Button" parent="VBoxContainer"]
+margin_top = 48.0
+margin_right = 154.0
+margin_bottom = 68.0
+text = "Impossible"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[connection signal="pressed" from="VBoxContainer/Start" to="." method="_on_Start_pressed"]
-[connection signal="pressed" from="VBoxContainer/Quit" to="." method="_on_Quit_pressed"]
+[connection signal="pressed" from="VBoxContainer/Normal" to="." method="_on_Normal_pressed"]
+[connection signal="pressed" from="VBoxContainer/Hard" to="." method="_on_Hard_pressed"]
+[connection signal="pressed" from="VBoxContainer/Impossible" to="." method="_on_Impossible_pressed"]
