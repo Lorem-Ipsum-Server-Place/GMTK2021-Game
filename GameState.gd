@@ -5,10 +5,8 @@ var weapon_rotation = 0
 var enemy_health = 10
 
 var total_kills = 0
-var enemy_spawn_count = 1
 
 var viewport_count = 1
-var timer = null
 
 
 signal player_dead()
@@ -28,14 +26,9 @@ func _on_Player_damage_player():
 	damage_player()
 
 func _ready():
-	timer = Timer.new()
-	timer.one_shot = false
-	timer.wait_time = 30
-	timer.connect("timeout", self, "_timer_inc_spawn_count")
-	timer.start()
+	pass
 
-func _timer_inc_spawn_count():
-	enemy_spawn_count += 1
+
 
 func _process(delta):
 	emit_signal("weapon_rotation", weapon_rotation)
