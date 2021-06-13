@@ -2,14 +2,14 @@ extends KinematicBody2D
 
 
 const MAX_OFFSET = 0.4
-const MOVEMENT_SPEED = 10
+const MOVEMENT_SPEED = 50
 
 var absolute_position = Vector2()
 var vertical_velocity_modifier = 0
 var tick_random_offset = 0
 var player = null
 
-var collision_layers = [1,2]
+var collision_layers = [3,2]
 
 
 # Called when the node enters the scene tree for the first time.

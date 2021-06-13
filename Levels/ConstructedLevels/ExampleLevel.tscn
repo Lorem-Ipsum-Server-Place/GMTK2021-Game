@@ -10,7 +10,15 @@ scale = Vector2( 20, 1 )
 
 [node name="DebugPlatform2" parent="." instance=ExtResource( 1 )]
 position = Vector2( -406.055, -40.2142 )
-scale = Vector2( 2, 0.5 )
+scale = Vector2( 2.76, 0.5 )
 
 [node name="DebugPlatform3" parent="." instance=ExtResource( 1 )]
 position = Vector2( -801.318, -117.997 )
+
+[node name="DebugPlatform4" parent="." instance=ExtResource( 1 )]
+position = Vector2( -1086.27, -175.64 )
+rotation = -3.14159
+scale = Vector2( 1, 0.25 )
+
+[node name="DebugPlatform" parent="DebugPlatform4" instance=ExtResource( 1 )]
+position = Vector2( 207.731, 325.435 )
