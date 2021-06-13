@@ -17,9 +17,11 @@ onready var level_enemies = [
 	[flying_enemy],
 ]
 
+onready var level1 = load("res://Levels/ConstructedLevels/Level1.tscn")
 onready var example_level = load("res://Levels/ConstructedLevels/ExampleLevel.tscn")
 
 onready var level_list = [
+	level1,
 	example_level
 ]
 
