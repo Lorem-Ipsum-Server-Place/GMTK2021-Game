@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://single_crystal_blue.png" type="Texture" id=1]
+
+[node name="Area2D" type="RigidBody2D"]
+mode = 1
+
+[node name="single_crystal_blue" type="Sprite" parent="."]
+position = Vector2( 4.00302, -1.63698 )
+texture = ExtResource( 1 )
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+polygon = PoolVector2Array( 4.00647, -79.4396, -26.4335, -36.4933, -27.6378, -33.3557, -28.0352, -2.90796, -27.3773, 41.1403, 5.4223, 76.7716, 35.6263, 36.8929, 36.3342, -36.4933 )
