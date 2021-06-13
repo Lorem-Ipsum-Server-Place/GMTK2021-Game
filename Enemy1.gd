@@ -37,7 +37,7 @@ func _physics_process(delta):
 	#position = absolute_position
 	position.y += vertical_velocity_modifier
 	
-	if player != null:
+	if player != null and is_instance_valid(player):
 		var movement_delta = player.position - position
 		
 		movement_delta = movement_delta.normalized() * MOVEMENT_SPEED

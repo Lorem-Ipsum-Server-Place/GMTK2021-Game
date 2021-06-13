@@ -38,6 +38,10 @@ func initialise_viewport(viewport: Viewport):
 		# copy settings from other viewport
 		pass
 	player.position = Vector2(200,200)
+	
+	player.connect("damage_player", game_state, "damage_player")
+	game_state.connect("player_dead", player, "_on_GameState_player_dead")
+	
 	viewport.add_child(player)
 	viewport.render_target_v_flip = true
 	
@@ -198,27 +202,28 @@ func _on_timer_add_enemies():
 		var possible_enemies = level_enemies[i]
 		
 		var player = get_node_or_null(viewport.get_path() as String + "/Player")
-		var player_weapon = player.player_weapon
-		
-		for j in range(enemy_spawn_count):
-			var enemy_to_spawn = possible_enemies[rand_range(0, len(possible_enemies))]
-			var enemy_instance = enemy_to_spawn.instance()
+		if player != null and is_instance_valid(player):
+			var player_weapon = player.player_weapon
 			
-			var player_position = player.position
-			var angle = rand_range(-PI, PI)
-			
-			var normal = Vector2(
-				sin(angle),
-				cos(angle)
-			)
-			
-			enemy_instance.position = Vector2(
-				player_position.x + normal.x*(viewport_size.x/2),
-				player_position.y + normal.y*(viewport_size.y/2)
-			)
-			
-			
-			print(player_weapon.connect("deal_damage", enemy_instance, "take_damage"))
-			viewport.add_child(enemy_instance)
+			for j in range(enemy_spawn_count):
+				var enemy_to_spawn = possible_enemies[rand_range(0, len(possible_enemies))]
+				var enemy_instance = enemy_to_spawn.instance()
+				
+				var player_position = player.position
+				var angle = rand_range(-PI, PI)
+				
+				var normal = Vector2(
+					sin(angle),
+					cos(angle)
+				)
+				
+				enemy_instance.position = Vector2(
+					player_position.x + normal.x*(viewport_size.x/2),
+					player_position.y + normal.y*(viewport_size.y/2)
+				)
+				
+				
+				print(player_weapon.connect("deal_damage", enemy_instance, "take_damage"))
+				viewport.add_child(enemy_instance)
 		
 		pass
