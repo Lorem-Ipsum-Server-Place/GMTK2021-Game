@@ -1,12 +1,13 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://DebugPlatform.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Teleport_Temp.tscn" type="PackedScene" id=2]
 
 [node name="Node2D" type="Node2D"]
 scale = Vector2( 0.707075, 0.99751 )
 
 [node name="Vertical Edge" parent="." instance=ExtResource( 1 )]
-position = Vector2( -1147.01, 291.827 )
+position = Vector2( -1144.18, 291.827 )
 scale = Vector2( -15.7333, 52.6637 )
 
 [node name="Vertical Edge2" parent="." instance=ExtResource( 1 )]
@@ -116,3 +117,8 @@ scale = Vector2( 0.752568, 7.33973 )
 [node name="Vertical Medium" parent="." instance=ExtResource( 1 )]
 position = Vector2( 1860.25, 109.77 )
 scale = Vector2( 0.752568, 3.08913 )
+
+[node name="teleport_temp" parent="." instance=ExtResource( 2 )]
+position = Vector2( 6392.35, 1022.06 )
+
+[connection signal="teleport" from="teleport_temp" to="teleport_temp" method="_on_teleport_temp_teleport"]
