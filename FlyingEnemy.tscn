@@ -7,8 +7,8 @@
 extents = Vector2( 8.95279, 8.95685 )
 
 [node name="EnemyBody" type="KinematicBody2D"]
-collision_layer = 6
-collision_mask = 6
+collision_layer = 0
+collision_mask = 5
 script = ExtResource( 2 )
 
 [node name="Test Enemy" type="Sprite" parent="."]
@@ -18,3 +18,9 @@ texture = ExtResource( 1 )
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 rotation = 0.785398
 shape = SubResource( 1 )
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.5
+one_shot = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]
