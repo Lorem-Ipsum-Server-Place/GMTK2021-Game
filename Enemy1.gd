@@ -16,7 +16,7 @@ var health = null
 var dead = false
 var state = EnemyState.PERSUING
 
-var collision_layers = [3,2]
+var collision_layers = [0,2]
 
 
 # Called when the node enters the scene tree for the first time.
@@ -67,7 +67,7 @@ func _physics_process(delta):
 func take_damage(damage_value, collider_id):
 	if collider_id == get_instance_id():
 		for layer in collision_layers:
-			set_collision_mask_bit(layer, 0)
+			set_collision_layer_bit(layer, 0)
 		state = EnemyState.FLEEING
 		$Timer.start()
 		if health <= damage_value:
@@ -82,5 +82,5 @@ func take_damage(damage_value, collider_id):
 
 func _on_Timer_timeout():
 	for layer in collision_layers:
-		set_collision_mask_bit(layer, 1)
+		set_collision_layer_bit(layer, 1)
 	state = EnemyState.PERSUING

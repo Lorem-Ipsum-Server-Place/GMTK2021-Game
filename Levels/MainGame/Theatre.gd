@@ -6,6 +6,8 @@ var viewports:Array = []
 var draw_surfaces:Array = []
 var active_viewport: int = 0
 var active_level = null
+var timer = null
+var enemy_spawn_count = 1
 
 onready var flying_enemy = load("res://FlyingEnemy.tscn")
 
@@ -127,6 +129,16 @@ func get_viewport_position(index):
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	
+	timer = Timer.new()
+	timer.wait_time = 30
+	timer.set_paused(false)
+	print(timer.connect("timeout", self, "inc_enemy_spawn_count"))
+	timer.autostart = true
+	
+	add_child(timer)
+	
+	GameState._ready()
+	
 	active_level = level_list[0]
 	
 	
@@ -138,6 +150,11 @@ func _ready():
 	#var player = load("res://Player.tscn").instance()
 	#add_child(player)
 	
+	
+func inc_enemy_spawn_count():
+	enemy_spawn_count += 1
+	print("new enemy spawn count is : ", enemy_spawn_count)
+	timer.start()
 	
 func calculate_weapon_angle():
 	var angle = 0
@@ -201,7 +218,7 @@ func _on_timer_add_enemies():
 		if player != null and is_instance_valid(player):
 			var player_weapon = player.player_weapon
 			
-			for j in range(GameState.enemy_spawn_count):
+			for j in range(enemy_spawn_count):
 				var enemy_to_spawn = possible_enemies[rand_range(0, len(possible_enemies))]
 				var enemy_instance = enemy_to_spawn.instance()
 				
