@@ -71,9 +71,11 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
+	if get_position().y > 1200:
+		print("killing player")
+		dead = true
 	if dead:
 		self.free()
-
 func get_inputs():
 	# If either direction is pressed, figure out which way we're going
 	if Input.is_action_pressed("game_left") or Input.is_action_pressed("game_right"):
@@ -147,6 +149,7 @@ func _physics_process(delta):
 		elif is_collider_pickup(collision):
 			emit_signal("collect_pickup")
 		elif is_collider_teleport(collision):
+			emit_signal("teleport_player")
 			emit_signal("teleport_player")
 			
 	
