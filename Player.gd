@@ -5,6 +5,12 @@ enum PlayerDirection{
 	LEFT
 }
 
+enum PlayerAttackState{
+	READY,
+	ACTIVE,
+	NOT_READY
+}
+
 
 
 var player_velocity = Vector2()
@@ -15,12 +21,28 @@ var is_invincible = false
 var PLAYER_MOVE_SPEED = INITIAL_PLAYER_MOVE_SPEED
 var PLAYER_JUMP_COUNT = INITIAL_PLAYER_JUMP_COUNT
 var dead = false
+var attack_state = PlayerAttackState.READY
+var attack_angle = 0
+var attack_starting_pos = Vector2()
 
 
 const INITIAL_PLAYER_MOVE_SPEED = 450
 const PLAYER_JUMP_VELOCITY = 1000
 const INITIAL_PLAYER_JUMP_COUNT = 2
-const PLAYER_WEAPON_DISTANCE = 40
+
+const PLAYER_WEAPON_ATTACK_RANGE = 160
+
+const PLAYER_WEAPON_VERTICAL_OFFSET = 60
+const PLAYER_WEAPON_MAX_HORIZONTAL_OFFSET = 80
+
+const PLAYER_WEAPON_DAMAGE = 5
+const PLAYER_WEAPON_RECALL_DISTANCE = 1 #px
+const PLAYER_WEAPON_MAX_RESET_DEVIANCE = 40 #px
+
+const PLAYER_WEAPON_IDLE_LERP_WEIGHT = 0.05
+const PLAYER_WEAPON_ROTATION_LERP_WEIGHT = 0.25
+const PLAYER_WEAPON_ATTACK_LERP_WEIGHT = 0.25
+
 const INVINCIBILITY_DURATION_SECONDS = 1
 const ENEMY_COLLISION_LAYERS = [2]
 
@@ -28,6 +50,8 @@ const GRAVITY = 60
 
 signal damage_player()
 signal collect_pickup()
+# pass damage value so we can set it to 0 if we're not mid-attack
+signal weapon_set_damage(damage_value)
 
 # Load weapon scenes, we can choose from these on init
 onready var WEAPON_SWORD = load("res://weapon_sword.tscn")
@@ -42,6 +66,7 @@ func _ready():
 	add_child(player_weapon, true)
 	
 	connect("damage_player", self, "_on_Player_damage_player")
+	connect("weapon_set_damage", player_weapon, "_on_Player_set_weapon_damage")
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -59,6 +84,13 @@ func get_inputs():
 	# otherwise cancel our movement
 	else:
 		player_velocity.x = 0
+		
+	if attack_state == PlayerAttackState.READY and Input.is_action_just_pressed("game_attack"):
+		attack_state = PlayerAttackState.ACTIVE
+		attack_angle = player_weapon.rotation
+		attack_starting_pos = player_weapon.position
+		emit_signal("weapon_set_damage", PLAYER_WEAPON_DAMAGE)
+		
 	
 	# If we have any jumps left, set our vertical jump velocity so we go up
 	if Input.is_action_just_pressed("game_jump") and jump_count > 0:
@@ -135,17 +167,70 @@ func _on_Player_damage_player():
 	
 
 func on_GameState_rotate_sword(rotation):
-	# Set our weapon rotation to what's set in the game state
-	player_weapon.rotation = rotation
-	
-	var normal_offset = Vector2(
-		sin(rotation),
-		-cos(rotation)
-	)
-	player_weapon.position = normal_offset * PLAYER_WEAPON_DISTANCE
-	
-	print("set weapon rotation")
-
+	if attack_state in [PlayerAttackState.READY, PlayerAttackState.NOT_READY]:
+		# fully rotate weapon to avoid strange lerp behaviour when 
+		# the sign flips
+		if Input.is_action_just_pressed("ui_accept"):
+			print("Rotation: ", rotation)
+			print("Weapon Rotation: ", player_weapon.rotation)
+		
+		if rotation > PI and player_weapon.rotation < -PI / 4:
+			player_weapon.rotation += 2 * PI
+			print("New Weapon Rotation: ", player_weapon.rotation)
+		elif rotation < -PI/4  and player_weapon.rotation > PI:
+			player_weapon.rotation -= 2 * PI
+			print("New Weapon Rotation: ", player_weapon.rotation)
+		# Set our weapon rotation to what's set in the game state
+		var new_rotation = lerp(
+			player_weapon.rotation,
+			rotation,
+			PLAYER_WEAPON_ROTATION_LERP_WEIGHT
+		)
+		
+		player_weapon.rotation = new_rotation
+		
+		var horizontal_offset = sin(rotation)
+		var desired_position = Vector2(
+			-horizontal_offset * PLAYER_WEAPON_MAX_HORIZONTAL_OFFSET,
+			-PLAYER_WEAPON_VERTICAL_OFFSET
+		)
+		
+		var new_position = lerp(
+			player_weapon.position,
+			desired_position,
+			PLAYER_WEAPON_IDLE_LERP_WEIGHT
+		)
+		
+		player_weapon.position = new_position
+		
+		if attack_state == PlayerAttackState.NOT_READY:
+			var position_delta = desired_position - new_position
+			if position_delta.length() <= PLAYER_WEAPON_MAX_RESET_DEVIANCE:
+				attack_state = PlayerAttackState.READY
+		
+		
+	else:
+		# we're attacking, so jab forwards. probably not gonna be adding guns...
+		var desired_position = Vector2(
+			sin(attack_angle),
+			-cos(attack_angle)
+		) * PLAYER_WEAPON_ATTACK_RANGE 
+		
+		desired_position += attack_starting_pos
+		
+		var new_position = lerp(
+			player_weapon.position,
+			desired_position,
+			PLAYER_WEAPON_ATTACK_LERP_WEIGHT
+		)
+		
+		player_weapon.position = new_position
+		
+		var position_delta = new_position - desired_position
+		
+		if position_delta.length() <= PLAYER_WEAPON_RECALL_DISTANCE:
+			attack_state = PlayerAttackState.NOT_READY
+			emit_signal("weapon_set_damage", 0)
 
 func _on_Pickup_Temp_boostspeed(increase):
 	PLAYER_MOVE_SPEED += increase
