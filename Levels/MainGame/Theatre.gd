@@ -8,6 +8,15 @@ var game_state = null
 var active_viewport: int = 0
 var active_level = null
 
+var enemy_spawn_count = 1
+
+onready var flying_enemy = load("res://FlyingEnemy.tscn")
+
+onready var level_enemies = [
+	[flying_enemy],
+	[flying_enemy],
+]
+
 onready var example_level = load("res://Levels/ConstructedLevels/ExampleLevel.tscn")
 
 onready var level_list = [
@@ -116,9 +125,12 @@ func get_viewport_position(index):
 func _ready():
 	
 	active_level = level_list[0]
+	
+	
 	init_game_state()
 	
 	add_new_viewport()
+	#add_new_viewport()
 	pass
 	#var player = load("res://Player.tscn").instance()
 	#add_child(player)
@@ -173,5 +185,20 @@ func _process(delta):
 	pass
 
 
-
+func _on_timer_add_enemies():
+	for i in range(len(viewports)):
+		var viewport = viewports[i] as Viewport
 		
+		var possible_enemies = level_enemies[i]
+		
+		var player = get_node_or_null(viewport.get_path() as String + "/Player")
+		var player_weapon = player.player_weapon
+		
+		for j in range(enemy_spawn_count):
+			var enemy_to_spawn = possible_enemies[rand_range(0, len(possible_enemies))]
+			var enemy_instance = enemy_to_spawn.instance()
+			
+			print(player_weapon.connect("deal_damage", enemy_instance, "take_damage"))
+			viewport.add_child(enemy_instance)
+		
+		pass
