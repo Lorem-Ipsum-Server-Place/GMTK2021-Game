@@ -4,11 +4,8 @@ const TINY_FLOAT = 0.0000001
 
 var viewports:Array = []
 var draw_surfaces:Array = []
-var game_state = null
 var active_viewport: int = 0
 var active_level = null
-
-var enemy_spawn_count = 1
 
 onready var flying_enemy = load("res://FlyingEnemy.tscn")
 
@@ -39,8 +36,8 @@ func initialise_viewport(viewport: Viewport):
 		pass
 	player.position = Vector2(200,200)
 	
-	player.connect("damage_player", game_state, "damage_player")
-	game_state.connect("player_dead", player, "_on_GameState_player_dead")
+	player.connect("damage_player", GameState, "damage_player")
+	GameState.connect("player_dead", player, "_on_GameState_player_dead")
 	
 	viewport.add_child(player)
 	viewport.render_target_v_flip = true
@@ -49,7 +46,7 @@ func initialise_viewport(viewport: Viewport):
 	
 	viewport.add_child(single_level)
 	
-	game_state.connect("weapon_rotation", player, "on_GameState_rotate_sword")
+	GameState.connect("weapon_rotation", player, "on_GameState_rotate_sword")
 
 func create_rect(dimensions: Vector2):
 	return PoolVector2Array([
@@ -111,10 +108,9 @@ func add_new_viewport():
 	
 
 func init_game_state():
-	game_state = load("res://GameState.tscn").instance()
-	add_child(game_state)
 	
-	connect("update_global_weapon_angle", game_state, "_on_Theatre_update_global_weapon_angle")
+	connect("update_global_weapon_angle", GameState, "_on_Theatre_update_global_weapon_angle")
+	GameState.total_kills = 0
 	
 
 func get_viewport_position(index):
@@ -136,8 +132,8 @@ func _ready():
 	
 	init_game_state()
 	
-	add_new_viewport()
-	add_new_viewport()
+	for i in range(GameState.viewport_count):
+		add_new_viewport()
 	pass
 	#var player = load("res://Player.tscn").instance()
 	#add_child(player)
@@ -205,9 +201,17 @@ func _on_timer_add_enemies():
 		if player != null and is_instance_valid(player):
 			var player_weapon = player.player_weapon
 			
-			for j in range(enemy_spawn_count):
+			for j in range(GameState.enemy_spawn_count):
 				var enemy_to_spawn = possible_enemies[rand_range(0, len(possible_enemies))]
 				var enemy_instance = enemy_to_spawn.instance()
+				
+				var e_graphic = enemy_instance.get_node("EnemyGraphic") as Sprite
+				
+				var modulation_colour = Color.from_hsv(randf(), .4, 1, 1 )
+				
+				e_graphic.modulate = modulation_colour
+				
+				
 				
 				var player_position = player.position
 				var angle = rand_range(-PI, PI)

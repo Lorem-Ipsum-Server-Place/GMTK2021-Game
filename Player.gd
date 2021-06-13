@@ -26,8 +26,8 @@ var attack_angle = 0
 var attack_starting_pos = Vector2()
 
 
-const INITIAL_PLAYER_MOVE_SPEED = 450
-const PLAYER_JUMP_VELOCITY = 1000
+const INITIAL_PLAYER_MOVE_SPEED = 600
+const PLAYER_JUMP_VELOCITY = 1200
 const INITIAL_PLAYER_JUMP_COUNT = 2
 
 const PLAYER_WEAPON_ATTACK_RANGE = 160
@@ -41,7 +41,8 @@ const PLAYER_WEAPON_MAX_RESET_DEVIANCE = 40 #px
 
 const PLAYER_WEAPON_IDLE_LERP_WEIGHT = 0.05
 const PLAYER_WEAPON_ROTATION_LERP_WEIGHT = 0.25
-const PLAYER_WEAPON_ATTACK_LERP_WEIGHT = 0.25
+const PLAYER_WEAPON_ATTACK_LERP_WEIGHT = 0.4
+const PLAYER_WEAPON_RETURN_LERP_WEIGHT = 0.35
 
 const INVINCIBILITY_DURATION_SECONDS = 1
 const ENEMY_COLLISION_LAYERS = [3]
@@ -71,11 +72,18 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	if get_position().y > 1200:
-		print("killing player")
-		dead = true
 	if dead:
 		self.free()
+	else:
+		var new_modulate_colour = lerp(
+			$"Player Debug Sprite".modulate,
+			Color(1,1,1),
+			0.05
+		)
+		
+		$"Player Debug Sprite".modulate = new_modulate_colour
+
+
 func get_inputs():
 	# If either direction is pressed, figure out which way we're going
 	if Input.is_action_pressed("game_left") or Input.is_action_pressed("game_right"):
@@ -150,7 +158,6 @@ func _physics_process(delta):
 			emit_signal("collect_pickup")
 		elif is_collider_teleport(collision):
 			emit_signal("teleport_player")
-			emit_signal("teleport_player")
 			
 	
 	# Ask the collision whether we're stood on something
@@ -180,6 +187,9 @@ func _on_Player_damage_player():
 	$InvincibilityTimer.start(INVINCIBILITY_DURATION_SECONDS)
 	is_invincible = true
 	set_enemy_collisions(false)
+	
+	var damage_colour = Color(1,.5,.5,1)
+	$"Player Debug Sprite".modulate = damage_colour
 	
 
 func on_GameState_rotate_sword(rotation):
@@ -211,10 +221,14 @@ func on_GameState_rotate_sword(rotation):
 			-PLAYER_WEAPON_VERTICAL_OFFSET
 		)
 		
+		var lerp_weight = PLAYER_WEAPON_IDLE_LERP_WEIGHT
+		if attack_state == PlayerAttackState.NOT_READY:
+			lerp_weight = PLAYER_WEAPON_RETURN_LERP_WEIGHT
+		
 		var new_position = lerp(
 			player_weapon.position,
 			desired_position,
-			PLAYER_WEAPON_IDLE_LERP_WEIGHT
+			lerp_weight
 		)
 		
 		player_weapon.position = new_position
