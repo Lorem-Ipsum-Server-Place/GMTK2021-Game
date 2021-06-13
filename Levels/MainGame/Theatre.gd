@@ -213,8 +213,8 @@ func _on_timer_add_enemies():
 			)
 			
 			enemy_instance.position = Vector2(
-				player_position.x + normal.x*viewport_size.x,
-				player_position.y + normal.y*viewport_size.y
+				player_position.x + normal.x*(viewport_size.x/2),
+				player_position.y + normal.y*(viewport_size.y/2)
 			)
 			
 			
