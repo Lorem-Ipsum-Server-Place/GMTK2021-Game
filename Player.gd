@@ -73,6 +73,7 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	if dead:
+		get_tree().change_scene("res://Levels/Menu/Game Over.tscn")
 		self.free()
 	else:
 		var new_modulate_colour = lerp(

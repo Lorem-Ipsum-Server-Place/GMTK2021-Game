@@ -69,7 +69,11 @@ func calculate_viewport_area(viewport_count: int):
 	# We MUST have found a divisor
 	assert( divisor != -1 )
 	
-	return Vector2(window_size.x / divisor, window_size.y / divisor)
+	var divisor_y = divisor
+	if viewport_count == 2:
+		divisor_y = 1
+	
+	return Vector2(window_size.x / divisor, window_size.y / divisor_y)
 
 func add_new_viewport():
 	var window_size: Vector2 = get_viewport_rect().size
@@ -108,6 +112,7 @@ func init_game_state():
 	
 	connect("update_global_weapon_angle", GameState, "_on_Theatre_update_global_weapon_angle")
 	GameState.total_kills = 0
+	GameState.player_health = 4
 	
 
 func get_viewport_position(index):
