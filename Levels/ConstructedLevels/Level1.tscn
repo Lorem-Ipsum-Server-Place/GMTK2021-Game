@@ -1,0 +1,118 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://DebugPlatform.tscn" type="PackedScene" id=1]
+
+[node name="Node2D" type="Node2D"]
+scale = Vector2( 0.707075, 0.99751 )
+
+[node name="Vertical Edge" parent="." instance=ExtResource( 1 )]
+position = Vector2( -1147.01, 291.827 )
+scale = Vector2( -15.7333, 52.6637 )
+
+[node name="Vertical Edge2" parent="." instance=ExtResource( 1 )]
+position = Vector2( 7614.88, 403.424 )
+scale = Vector2( -15.7333, 52.6637 )
+
+[node name="DebugPlatform2" parent="." instance=ExtResource( 1 )]
+position = Vector2( 47386, -830.855 )
+scale = Vector2( 664.282, 11.5974 )
+
+[node name="DebugPlatform3" parent="." instance=ExtResource( 1 )]
+position = Vector2( 47481.4, 2547.39 )
+scale = Vector2( 664.282, 11.5974 )
+
+[node name="DebugPlatform4" parent="." instance=ExtResource( 1 )]
+position = Vector2( 54003.4, 2015.57 )
+scale = Vector2( 664.282, 11.5974 )
+
+[node name="Horizontal Normal" parent="." instance=ExtResource( 1 )]
+position = Vector2( 1290.98, 683.141 )
+scale = Vector2( 17.0486, 0.571435 )
+
+[node name="Horizontal Normal3" parent="." instance=ExtResource( 1 )]
+position = Vector2( 5459.83, 1119.07 )
+scale = Vector2( 17.0486, 0.571435 )
+
+[node name="Horizontal Normal2" parent="." instance=ExtResource( 1 )]
+position = Vector2( 1780.42, 1006.39 )
+scale = Vector2( 17.0486, 0.571435 )
+
+[node name="Horizontal Short" parent="." instance=ExtResource( 1 )]
+position = Vector2( 2940.82, 582.913 )
+scale = Vector2( 2.22703, 0.571435 )
+
+[node name="Horizontal Short13" parent="." instance=ExtResource( 1 )]
+position = Vector2( 2521.23, 407.789 )
+scale = Vector2( 2.22703, 0.571435 )
+
+[node name="Horizontal Short14" parent="." instance=ExtResource( 1 )]
+position = Vector2( 2069.93, 298.492 )
+scale = Vector2( 2.22703, 0.571435 )
+
+[node name="Horizontal Short4" parent="." instance=ExtResource( 1 )]
+position = Vector2( 3666.27, 1502.06 )
+scale = Vector2( 2.22703, 0.571435 )
+
+[node name="Horizontal Short5" parent="." instance=ExtResource( 1 )]
+position = Vector2( 3332.25, 1315.46 )
+scale = Vector2( 2.22703, 0.571435 )
+
+[node name="Horizontal Short6" parent="." instance=ExtResource( 1 )]
+position = Vector2( 3664.27, 1124.52 )
+scale = Vector2( 2.22703, 0.571435 )
+
+[node name="Horizontal Short7" parent="." instance=ExtResource( 1 )]
+position = Vector2( 3330.9, 918.99 )
+scale = Vector2( 2.22703, 0.571435 )
+
+[node name="Horizontal Short8" parent="." instance=ExtResource( 1 )]
+position = Vector2( 3660.66, 712.879 )
+scale = Vector2( 2.22703, 0.571435 )
+
+[node name="Horizontal Short17" parent="." instance=ExtResource( 1 )]
+position = Vector2( 3517.79, 294.281 )
+scale = Vector2( 2.22703, 0.571435 )
+
+[node name="Horizontal Short16" parent="." instance=ExtResource( 1 )]
+position = Vector2( 3337.17, 519.333 )
+scale = Vector2( 2.22703, 0.571435 )
+
+[node name="Horizontal Short9" parent="." instance=ExtResource( 1 )]
+position = Vector2( 4286.13, 591.35 )
+scale = Vector2( 2.22703, 0.571435 )
+
+[node name="Horizontal Short10" parent="." instance=ExtResource( 1 )]
+position = Vector2( 4870.22, 591.35 )
+scale = Vector2( 2.22703, 0.571435 )
+
+[node name="Horizontal Short11" parent="." instance=ExtResource( 1 )]
+position = Vector2( 5465.63, 591.35 )
+scale = Vector2( 2.22703, 0.571435 )
+
+[node name="Horizontal Short12" parent="." instance=ExtResource( 1 )]
+position = Vector2( 6055.39, 591.35 )
+scale = Vector2( 2.22703, 0.571435 )
+
+[node name="Horizontal Short2" parent="." instance=ExtResource( 1 )]
+position = Vector2( 597.116, 1369.28 )
+scale = Vector2( 2.22703, 0.571435 )
+
+[node name="Horizontal Short15" parent="." instance=ExtResource( 1 )]
+position = Vector2( 190.105, 1176.15 )
+scale = Vector2( 2.22703, 0.571435 )
+
+[node name="Horizontal Short3" parent="." instance=ExtResource( 1 )]
+position = Vector2( 1015.16, 1557.76 )
+scale = Vector2( 2.22703, 0.571435 )
+
+[node name="Vertical Blocker" parent="." instance=ExtResource( 1 )]
+position = Vector2( 3114.96, 867.817 )
+scale = Vector2( 0.752568, 9.10412 )
+
+[node name="Vertical Blocker2" parent="." instance=ExtResource( 1 )]
+position = Vector2( 3882.22, 994.216 )
+scale = Vector2( 0.752568, 7.33973 )
+
+[node name="Vertical Medium" parent="." instance=ExtResource( 1 )]
+position = Vector2( 1860.25, 109.77 )
+scale = Vector2( 0.752568, 3.08913 )
