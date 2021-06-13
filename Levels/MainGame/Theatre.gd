@@ -6,6 +6,13 @@ var viewports:Array = []
 var draw_surfaces:Array = []
 var game_state = null
 var active_viewport: int = 0
+var active_level = null
+
+onready var example_level = load("res://Levels/ConstructedLevels/ExampleLevel.tscn")
+
+onready var level_list = [
+	example_level
+]
 
 signal update_global_weapon_angle(rotation)
 
@@ -22,6 +29,10 @@ func initialise_viewport(viewport: Viewport):
 	player.position = Vector2(200,200)
 	viewport.add_child(player)
 	viewport.render_target_v_flip = true
+	
+	var single_level = active_level.instance()
+	
+	viewport.add_child(single_level)
 	
 	game_state.connect("weapon_rotation", player, "on_GameState_rotate_sword")
 
@@ -103,10 +114,10 @@ func get_viewport_position(index):
 	
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	
+	active_level = level_list[0]
 	init_game_state()
 	
-	add_new_viewport()
-	add_new_viewport()
 	add_new_viewport()
 	pass
 	#var player = load("res://Player.tscn").instance()
