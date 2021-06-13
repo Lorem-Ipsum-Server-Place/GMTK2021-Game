@@ -11,8 +11,8 @@ enum PlayerAttackState{
 	NOT_READY
 }
 
-
-
+var startingloc = Vector2()
+var location1 = Vector2(1433, -132)
 var player_velocity = Vector2()
 var jump_count = 1
 var player_weapon = null
@@ -47,7 +47,7 @@ const INVINCIBILITY_DURATION_SECONDS = 1
 const ENEMY_COLLISION_LAYERS = [2, 3]
 
 const GRAVITY = 60
-
+signal teleport_player()
 signal damage_player()
 signal collect_pickup()
 # pass damage value so we can set it to 0 if we're not mid-attack
@@ -117,6 +117,18 @@ func is_collider_pickup(collision: KinematicCollision2D):
 		print("Pickup!")
 		return true
 	return false
+
+
+func is_collider_teleport(collision: KinematicCollision2D):
+	var colliding_object_class = collision.collider.name
+	
+	# Assume that all Pickups will have Teleport in their KinematicBody2D name
+	if colliding_object_class.find("Teleport") != -1:
+		print("Teleport")
+		return true
+	return false
+	
+
 func _physics_process(delta):
 	get_inputs()
 	
@@ -134,7 +146,8 @@ func _physics_process(delta):
 			emit_signal("damage_player")
 		elif is_collider_pickup(collision):
 			emit_signal("collect_pickup")
-			
+		elif is_collider_teleport(collision):
+			emit_signal("teleport_player")
 			
 	
 	# Ask the collision whether we're stood on something
@@ -240,3 +253,9 @@ func _on_Pickup_Temp_boostspeed(increase):
 func _on_Pickup_Temp_boostJumps(Jumping):
 	PLAYER_JUMP_COUNT += Jumping
 	print("Boosting Jumps")
+
+
+func _on_Teleport_TempN1_teleport(teleporting):
+	startingloc = get_global_position()
+	set_global_position(location1)
+	
