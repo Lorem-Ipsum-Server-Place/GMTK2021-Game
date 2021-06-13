@@ -52,7 +52,7 @@ scale = Vector2( 2, 2 )
 position = Vector2( 645.516, 869.672 )
 
 [node name="Temp_Pickup" type="Sprite" parent="."]
-position = Vector2( 1433, -132 )
+position = Vector2( 1774.31, 807.505 )
 texture = ExtResource( 8 )
 
 [connection signal="teleport" from="Teleport_Temp(N1)" to="Player" method="_on_Teleport_TempN1_teleport"]
