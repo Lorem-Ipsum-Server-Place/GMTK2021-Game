@@ -12,7 +12,23 @@ font_data = SubResource( 1 )
 [node name="Control" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+margin_left = 4.00452
+margin_top = -1.33484
+margin_right = 4.00452
+margin_bottom = -1.33484
 script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="All Controls" type="Label" parent="."]
+margin_left = 27.478
+margin_top = 17.5254
+margin_right = 239.478
+margin_bottom = 49.5254
+rect_pivot_offset = Vector2( 149.941, 0 )
+custom_fonts/font = SubResource( 2 )
+text = "Controls:"
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -26,14 +42,19 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Back To Menu" type="Label" parent="."]
-margin_left = 13.739
-margin_top = 8.7627
-margin_right = 176.739
-margin_bottom = 32.7627
-rect_pivot_offset = Vector2( 69.7566, 12 )
+[node name="Controls" type="Label" parent="."]
+margin_left = 23.0829
+margin_top = 51.4776
+margin_right = 989.083
+margin_bottom = 258.478
+rect_pivot_offset = Vector2( 367.917, 174.203 )
 custom_fonts/font = SubResource( 2 )
-text = "Hello World"
+text = "move left = A OR left arrow key
+move right = d or right arrow key
+jump = spacebar
+attack = left mouse button
+to aim the sword use the mouse and hover over the enemy
+"
 __meta__ = {
 "_edit_use_anchors_": false
 }
