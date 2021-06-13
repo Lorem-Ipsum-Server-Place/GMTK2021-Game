@@ -115,6 +115,7 @@ func get_viewport_position(index):
 	var viewport_count = len(viewports)
 	var window_size = get_viewport_rect().size
 	
+	
 	var viewport_area = calculate_viewport_area(viewport_count)
 	return Vector2(
 			int(index*viewport_area.x) % int(window_size.x),
@@ -130,7 +131,7 @@ func _ready():
 	init_game_state()
 	
 	add_new_viewport()
-	#add_new_viewport()
+	add_new_viewport()
 	pass
 	#var player = load("res://Player.tscn").instance()
 	#add_child(player)
@@ -168,12 +169,14 @@ func _process(delta):
 	var mouse_active_viewport = -1
 	var mouse_position = get_viewport().get_mouse_position()
 	var viewport_size = calculate_viewport_area(len(viewports))
+	
 	for i in range(len(viewports)):
 		var viewport_position = get_viewport_position(i)
 		var viewport_area = Rect2(viewport_position, viewport_size)
 		if viewport_area.has_point(mouse_position):
 			mouse_active_viewport = i
 			break
+		
 	
 	if mouse_active_viewport != -1:
 		active_viewport = mouse_active_viewport
@@ -186,6 +189,7 @@ func _process(delta):
 
 
 func _on_timer_add_enemies():
+	var viewport_size = calculate_viewport_area(len(viewports))
 	for i in range(len(viewports)):
 		var viewport = viewports[i] as Viewport
 		
@@ -197,6 +201,20 @@ func _on_timer_add_enemies():
 		for j in range(enemy_spawn_count):
 			var enemy_to_spawn = possible_enemies[rand_range(0, len(possible_enemies))]
 			var enemy_instance = enemy_to_spawn.instance()
+			
+			var player_position = player.position
+			var angle = rand_range(-PI, PI)
+			
+			var normal = Vector2(
+				sin(angle),
+				cos(angle)
+			)
+			
+			enemy_instance.position = Vector2(
+				player_position.x + normal.x*viewport_size.x,
+				player_position.y + normal.y*viewport_size.y
+			)
+			
 			
 			print(player_weapon.connect("deal_damage", enemy_instance, "take_damage"))
 			viewport.add_child(enemy_instance)
