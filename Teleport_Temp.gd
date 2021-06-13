@@ -3,7 +3,7 @@ extends KinematicBody2D
 var freeme = false
 var random_pickup = 0
 var startLoc = Vector2()
-export var location1 = Vector2(6386, 1019)
+export var location1 = Vector2(3515, 131)
 var player = null
 
 signal teleport(teleporting)

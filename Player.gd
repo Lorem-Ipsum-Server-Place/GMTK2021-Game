@@ -12,7 +12,7 @@ enum PlayerAttackState{
 }
 
 var startingloc = Vector2()
-var location1 = Vector2(6386, 1019)
+var location1 = Vector2(3515, 131)
 var player_velocity = Vector2()
 var jump_count = 1
 var player_weapon = null
